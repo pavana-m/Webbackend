@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Home</title>
+</head>
+<body>
+    <h2>Upload a Photo</h2>
+    <form method="POST" action="/tuffy_home" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".jpg, .jpeg, .png, .gif" required>
+        <input type="submit" value="Upload">
+    </form>
+    <h2>Your Private Photos</h2>
+    <ul>
+        {% for photo in tuffy_recipes %}
+        <li>
+            <img width="100px" height="100px" src="{{ url_for('static', filename='private/' ~ photo) }}" alt="Private Photo">
+            <button onclick="deletePhoto('{{ photo }}')">Delete</button>
+        </li>
+        {% endfor %}
+    </ul>
+    <script>
+        // Function to delete a photo
+        function deletePhoto(filename) {
+            fetch('/delete/' + filename, { method: 'DELETE' })
+                .then(response => {
+                    if (response.status === 200) {
+                        location.reload();
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
